@@ -1,0 +1,55 @@
+import {
+  Injectable,
+  UnprocessableEntityException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CredentialsDto } from './dto/credentials.dto';
+import { JwtService } from '@nestjs/jwt';
+import { Users } from 'src/users/entities/users.entity';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import { UserRole } from 'src/users/user-roles.enum';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
+    private jwtService: JwtService,
+  ) {}
+
+  async signUp(createUserDto: CreateUserDto): Promise<Users> {
+    createUserDto.password = bcrypt.hashSync(createUserDto.password, 8);
+    createUserDto.role = UserRole.USER;
+
+    return await this.userRepository.save(createUserDto);
+  }
+
+  async signIn(credentialsDto: CredentialsDto) {
+    const user = await this.userRepository.findOne({ 
+      where :{
+        email: credentialsDto.email
+      }  
+    });
+
+    const passwordIsValid = bcrypt.compareSync(
+      credentialsDto.password,
+      user.password,
+    );
+
+    if (!user && !passwordIsValid) {
+      // return { data: {"message": "Credenciais inválidas"} };
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
+
+    const jwtPayload = {
+      id: user.id,
+    };
+    const token = await this.jwtService.sign(jwtPayload);
+
+    return { data: {"user": user, "token": token} };
+  }
+
+}
