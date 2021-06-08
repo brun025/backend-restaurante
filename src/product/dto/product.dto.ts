@@ -1,5 +1,4 @@
 import { MaxLength, IsString, IsNumber, IsEnum, IsBase64, ValidateIf } from 'class-validator';
-// import { Users } from 'src/users/entities/users.entity';
 import { ProductType } from '../product-type.enum';
 
 export class ProductDto {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, HttpStatus, UseGuards, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Req, HttpStatus, UseGuards, Delete, Param } from '@nestjs/common';
 import { OrderDto } from './dto/order.dto';
 import { Orders } from './entities/orders.entity';
 import { OrderService } from './order.service';
@@ -16,8 +16,8 @@ export class OrderController {
     ) {}
 
   @Get()
-  public async getAll(@Res() res): Promise<Orders[]> {
-    const orders = await this.orderService.findAll();
+  public async getAll(@Res() res, @Req() request): Promise<Orders[]> {
+    const orders = await this.orderService.findAll(request.query);
 
     return res.status(HttpStatus.OK).json({
       orders: orders,

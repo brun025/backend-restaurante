@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/orders.entity';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 
 @Injectable()
@@ -19,8 +19,34 @@ export class OrderService {
     }
   }
 
-  public async findAll(): Promise<Orders[]> {
-    const orders = await this.orderRepository.find({relations: ["orderToProduct"]});
+  public async findAll(query: any): Promise<any> {
+    var where = {};
+    if(query.status != undefined){
+        where = {
+          status: query.status
+        }
+    }
+    if(query.client != undefined){
+      if(query.status != undefined){
+          where = {
+            status: query.status,
+            client_name: query.client
+          }
+      }
+      else{
+          where = {
+            client_name: query.client
+          }
+      }
+    }
+
+    const orders = await this.orderRepository.find({where, relations: ["orderToProducts"]});
+      // const orders = createQueryBuilder("orders")
+      // .select('o.id')
+      // .addSelect('p.name')
+      // .innerJoin('order_product','orders.id = order_product.ordersId')
+      // .innerJoin('products', 'products.id = order_product.productsId')
+      // .getMany();
     return orders;
   }
 
