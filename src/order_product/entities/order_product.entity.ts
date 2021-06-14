@@ -16,11 +16,19 @@ export class OrderProduct {
   @Column({nullable: true})
   meet_options: string;
 
-  @ManyToOne(() => Orders, order => order.orderToProducts, { lazy: true })
-  @JoinColumn({ referencedColumnName: "id" })
-  public orders: Orders;
+  // @ManyToOne(() => Orders, order => order.orderToProducts, { lazy: true })
+  // @JoinColumn({ referencedColumnName: "id" })
+  // public orders: Orders;
 
-  @ManyToOne(() => Products, product => product.orderToProducts, { lazy: true })
-  @JoinColumn({ referencedColumnName: "id" })
-  public products: Products;
+  // @ManyToOne(() => Products, product => product.orderToProducts, { lazy: true })
+  // @JoinColumn({ referencedColumnName: "id" })
+  // public products: Products;
+
+  @ManyToOne(() => Orders, (orders) => orders.orderToProducts, { eager: false})
+  @JoinColumn([{ name: "ordersId", referencedColumnName: "id" }])
+  orders: Orders;
+  
+  @ManyToOne(() => Products, (products) => products.orderToProducts, { eager: true })
+  @JoinColumn([{ name: "productsId", referencedColumnName: "id" }])
+  products: Products;
 }

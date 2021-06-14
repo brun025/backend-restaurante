@@ -10,9 +10,31 @@ export class OrderProductService {
     private readonly orderProductRepository: Repository<OrderProduct>,
   ) {}
 
-  public async createOrderProduct(order: any): Promise<any> {
+  // public async createOrderProduct(order: any): Promise<any> {
+  //   try {
+  //     return await this.orderProductRepository.save(order);
+  //   } catch (err) {
+  //     throw new HttpException(err, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+  public async createOrderProduct(orderId: number, body: any): Promise<any> {
     try {
-      return await this.orderProductRepository.save(order);
+      const list = [];
+
+      body.forEach(element => {
+        list.push({
+          amount: element.amount,
+          observation: element.observation,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+          meet_options: element.meet_options,
+          orders: orderId, 
+          products: element.product
+        });
+      });
+
+      return await this.orderProductRepository.save(list);
+
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }

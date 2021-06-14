@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/orders.entity';
-import { createQueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class OrderService {
   }
 
   public async findAll(query: any): Promise<any> {
-    var where = {};
+    let where = {};
     if(query.status != undefined){
         where = {
           status: query.status
@@ -30,11 +30,13 @@ export class OrderService {
       if(query.status != undefined){
           where = {
             status: query.status,
+            // eslint-disable-next-line @typescript-eslint/camelcase
             client_name: query.client
           }
       }
       else{
           where = {
+            // eslint-disable-next-line @typescript-eslint/camelcase
             client_name: query.client
           }
       }
@@ -50,12 +52,22 @@ export class OrderService {
     return orders;
   }
 
-  public async delete(id: string): Promise<any> {
+  public async updateStatus(order: Orders, id: string): Promise<Orders> {
     try {
-      return await this.orderRepository.delete(+id);
+      return await this.orderRepository.save({ ...order, id: Number(id) });
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public async findById(id: string): Promise<Orders> {
+    const order = await this.orderRepository.findOne({
+      where: {
+        id: id
+      },
+      relations: ["orderToProducts"]
+    });
+    return order;
   }
 
 }

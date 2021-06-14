@@ -24,7 +24,7 @@ export class ProductController {
   }
 
   @Get('/:productId')
-  public async getById(@Res() res, @Param('productId') productId: string): Promise<Products[]> {
+  public async getById(@Res() res, @Param('productId') productId: string): Promise<Products> {
     // console.log(request.query)
     const product = await this.productService.findById(productId);
 
@@ -42,9 +42,9 @@ export class ProductController {
     try {
       // console.log(productDto)
       if(productDto.image){
-        var nameImage = (new Date()).valueOf().toString() + '.png';
+        const nameImage = (new Date()).valueOf().toString() + '.png';
         // console.log(productDto)
-        var base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
+        const base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
   
         require("fs").writeFile(`./src/product/images/${nameImage}`, base64Data, 'base64', function(err) {
           console.log(err);
@@ -82,9 +82,9 @@ export class ProductController {
       const product = await this.productService.findById(productId);
       if(product){
         if(productDto.image){
-          var nameImage = (new Date()).valueOf().toString() + '.png';
+          const nameImage = (new Date()).valueOf().toString() + '.png';
           // console.log(productDto)
-          var base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
+          const base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
     
           require("fs").writeFile(`./src/product/images/${nameImage}`, base64Data, 'base64', function(err) {
             console.log(err);
@@ -114,6 +114,37 @@ export class ProductController {
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao atualizar produto!',
+        status: 400,
+      });
+    }
+  }
+
+  @Put('/:productId/update-status')
+  public async updateStatus(
+    @Res() res,
+    @Body() body: any,
+    @Param('productId') productId: string
+  ): Promise<any> {
+    try {
+      const product = await this.productService.findById(productId);
+      if(product){
+        product.status = body.status;
+        await this.productService.updateStatus(body, productId);
+  
+        return res.status(HttpStatus.OK).json({
+          message: 'Status atualizado com sucesso.',
+          status: 200,
+        });
+      }
+      else{
+        return res.status(HttpStatus.OK).json({
+          message: 'Produto não encontrado.',
+          status: 200,
+        });
+      }
+    } catch (err) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Erro ao atualizar status!',
         status: 400,
       });
     }

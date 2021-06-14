@@ -27,17 +27,36 @@ export class ProductService {
     }
   }
 
+  public async updateStatus(body: any, id: string): Promise<Products> {
+    try {
+      return await this.productRepository.save({ ...body, id: Number(id) });
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   public async findAll(query: any): Promise<Products[]> {
-    var search = {};
+    let where = {};
     if(query.type != undefined){
-      search = {
-        where: {
+        where = {
           type: query.type
         }
+    }
+    if(query.status != undefined){
+      if(query.type != undefined){
+          where = {
+            type: query.type,
+            status: query.status
+          }
+      }
+      else{
+          where = {
+            type: query.type
+          }
       }
     }
 
-    const products = await this.productRepository.find(search);
+    const products = await this.productRepository.find(where);
     return products;
   }
 
