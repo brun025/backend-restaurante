@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { join } from 'path';
+import { of } from 'rxjs';
 import { ProductDto } from './dto/product.dto';
 import { Products } from './entities/products.entity';
 import { ProductService } from './product.service';
@@ -15,6 +17,12 @@ export class ProductController {
     const products = await this.productService.findAll(request.query);
 
     return res.status(HttpStatus.OK).json(products);
+  }
+
+  @Get('images/:imagename')
+  public async findProfileImage(@Param('imagename') imagename, @Res() res: Response) {
+    console.log('Aqui', imagename);
+    return of(res.sendFile(join(process.cwd(), `src/product/images/${imagename}`)));
   }
 
   @Get('/paged')
@@ -72,7 +80,7 @@ export class ProductController {
             });
           }
         });
-        productDto.image = `product/images/${nameImage}`;
+        productDto.image = `products/images/${nameImage}`;
       }
 
       await this.productService.create(productDto);
