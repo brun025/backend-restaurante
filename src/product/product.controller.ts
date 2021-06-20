@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Req, HttpStatus, UseGuards, Delete, Param, UnsupportedMediaTypeException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Req, HttpStatus, UseGuards, Delete, Param, Put } from '@nestjs/common';
 import { ProductDto } from './dto/product.dto';
 import { Products } from './entities/products.entity';
 import { ProductService } from './product.service';
@@ -19,7 +19,7 @@ export class ProductController {
 
     return res.status(HttpStatus.OK).json({
       products: products,
-      status: 200,
+      status: HttpStatus.OK,
     });
   }
 
@@ -28,10 +28,18 @@ export class ProductController {
     // console.log(request.query)
     const product = await this.productService.findById(productId);
 
-    return res.status(HttpStatus.OK).json({
-      product: product,
-      status: 200,
-    });
+    if(product){
+      return res.status(HttpStatus.OK).json({
+        product: product,
+        status: HttpStatus.OK,
+      });
+    }
+    else{
+      return res.status(HttpStatus.NOT_FOUND).json({
+        message: 'Produto não encontrado.',
+        status: HttpStatus.NOT_FOUND,
+      });
+    }
   }
 
   @Post()
@@ -51,7 +59,7 @@ export class ProductController {
           if(err != null){
             return res.status(HttpStatus.BAD_REQUEST).json({
               message: 'Erro ao salvar imagem!'+err,
-              status: 400,
+              status: HttpStatus.BAD_REQUEST,
             });
           }
         });
@@ -62,12 +70,12 @@ export class ProductController {
 
       return res.status(HttpStatus.OK).json({
         message: 'Produto cadastrado com sucesso.',
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao cadastrar produto!',
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
@@ -91,7 +99,7 @@ export class ProductController {
             if(err != null){
               return res.status(HttpStatus.BAD_REQUEST).json({
                 message: 'Erro ao salvar imagem!'+err,
-                status: 400,
+                status: HttpStatus.BAD_REQUEST,
               });
             }
           });
@@ -106,15 +114,15 @@ export class ProductController {
         });
       }
       else{
-        return res.status(HttpStatus.OK).json({
+        return res.status(HttpStatus.NOT_FOUND).json({
           message: 'Produto não encontrado.',
-          status: 200,
+          status: HttpStatus.NOT_FOUND,
         });
       }
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao atualizar produto!',
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
@@ -133,19 +141,19 @@ export class ProductController {
   
         return res.status(HttpStatus.OK).json({
           message: 'Status atualizado com sucesso.',
-          status: 200,
+          status: HttpStatus.OK,
         });
       }
       else{
-        return res.status(HttpStatus.OK).json({
+        return res.status(HttpStatus.NOT_FOUND).json({
           message: 'Produto não encontrado.',
-          status: 200,
+          status: HttpStatus.NOT_FOUND,
         });
       }
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao atualizar status!',
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
@@ -160,12 +168,12 @@ export class ProductController {
 
       return res.status(HttpStatus.OK).json({
         message: "Produto deletado com sucesso.",
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Erro ao deletar produto!",
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

@@ -22,8 +22,6 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto): Promise<Users> {
     createUserDto.password = bcrypt.hashSync(createUserDto.password, 8);
-    createUserDto.role = UserRole.USER;
-
     return await this.userRepository.save(createUserDto);
   }
 
@@ -34,13 +32,16 @@ export class AuthService {
       }  
     });
 
+    if (!user) {
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
+
     const passwordIsValid = bcrypt.compareSync(
       credentialsDto.password,
       user.password,
     );
 
-    if (!user && !passwordIsValid) {
-      // return { data: {"message": "Credenciais inválidas"} };
+    if (!passwordIsValid) {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
