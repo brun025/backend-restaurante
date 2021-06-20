@@ -19,6 +19,8 @@ export class OrderProductService {
   // }
 
   public async createOrderProduct(orderId: number, body: any): Promise<any> {
+    console.log('orderId', orderId);
+    console.log('body', body);
     try {
       const list = [];
 
@@ -28,11 +30,11 @@ export class OrderProductService {
           observation: element.observation,
             // eslint-disable-next-line @typescript-eslint/camelcase
           meet_options: element.meet_options,
-          orders: orderId, 
-          products: element.product
+          orderId: orderId, 
+          productId: element.product
         });
       });
-
+      console.log(list);
       return await this.orderProductRepository.save(list);
 
     } catch (err) {

@@ -4,6 +4,15 @@ import { Products } from './entities/products.entity';
 import { Repository } from 'typeorm';
 import { ProductDto } from './dto/product.dto';
 
+interface IProductPaged {
+  total: number; 
+  page: number;
+  totalPages: number;
+  limit: number; 
+  offset: number;
+  instaces: Products[];
+}
+
 @Injectable()
 export class ProductService {
   constructor(
@@ -37,13 +46,13 @@ export class ProductService {
 
   public async findAll(query: any): Promise<Products[]> {
     let where = {};
-    if(query.type != undefined){
+    if(query.type){
         where = {
           type: query.type
         }
     }
-    if(query.status != undefined){
-      if(query.type != undefined){
+    if(query.status){
+      if(query.type){
           where = {
             type: query.type,
             status: query.status
@@ -75,6 +84,23 @@ export class ProductService {
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public async findPaged(limit: number, page: number, type: string): Promise<IProductPaged> {
+    const ITENS_PER_PAGE = 100;
+    limit = limit > ITENS_PER_PAGE || limit <= 0 ? ITENS_PER_PAGE : limit;
+    const offset = page <= 0 ? 0 : page * limit;
+
+    const productsPaged = await this.productRepository.find({
+      where: { type },
+      order: { createdAt: 'ASC' },
+      skip: offset,
+      take: limit,
+    });
+
+    const total = await this.productRepository.count({where: {type}});
+    const totalPages = total > limit ? total / limit : 1;
+    return { total, page, totalPages, limit, offset, instaces: productsPaged }
   }
 
 }

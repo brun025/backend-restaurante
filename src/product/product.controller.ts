@@ -1,11 +1,8 @@
-import { Controller, Get, Post, Body, Res, Req, HttpStatus, UseGuards, Delete, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ProductDto } from './dto/product.dto';
 import { Products } from './entities/products.entity';
 import { ProductService } from './product.service';
-import { AuthGuard } from "@nestjs/passport";
-import { RolesGuard } from 'src/auth/roles.guard';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { Users } from 'src/users/entities/users.entity';
 
 // @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('api/products')
@@ -17,9 +14,24 @@ export class ProductController {
     // console.log(request.query)
     const products = await this.productService.findAll(request.query);
 
+    return res.status(HttpStatus.OK).json(products);
+  }
+
+  @Get('/paged')
+  public async getPaged(@Res() res: Response, @Req() request: Request) {
+    let { limit, page }: any = request.query;
+    const { type }: any = request.query;
+    limit = parseInt(limit || 0);
+    page = parseInt(page || 0);
+    const productPaged = await this.productService.findPaged(limit, page, type); 
+    
     return res.status(HttpStatus.OK).json({
-      products: products,
-      status: HttpStatus.OK,
+      total: productPaged.total,
+      page: productPaged.page,
+      totalPages: productPaged.totalPages,
+      limit: productPaged.limit,
+      offset: productPaged.offset,
+      instances: productPaged.instaces
     });
   }
 
@@ -29,10 +41,7 @@ export class ProductController {
     const product = await this.productService.findById(productId);
 
     if(product){
-      return res.status(HttpStatus.OK).json({
-        product: product,
-        status: HttpStatus.OK,
-      });
+      return res.status(HttpStatus.OK).json(product);
     }
     else{
       return res.status(HttpStatus.NOT_FOUND).json({

@@ -1,8 +1,5 @@
 import { OrderProduct } from 'src/order_product/entities/order_product.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { OrderPayment } from '../order-payment.enum';
-import { OrderStatus } from '../order-status.enum';
-import { OrderWithdrawal } from '../order-withdrawal.enum';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Orders {
@@ -57,6 +54,6 @@ export class Orders {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => OrderProduct, orderToProduct => orderToProduct.products)
-  public orderToProducts: OrderProduct[];
+  @OneToMany(() => OrderProduct, orderToProduct => orderToProduct.orders, {eager: true})
+  orderToProducts: OrderProduct[];
 }

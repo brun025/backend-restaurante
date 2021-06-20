@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Put, Body, Res, Req, HttpStatus, UseGuards, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Response, Request } from 'express';
+import { OrderProductService } from 'src/order_product/order_product.service';
 import { OrderDto } from './dto/order.dto';
 import { Orders } from './entities/orders.entity';
-import { OrderService } from './order.service';
-import { AuthGuard } from "@nestjs/passport";
-import { RolesGuard } from 'src/auth/roles.guard';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { OrderProductService } from 'src/order_product/order_product.service';
 import { OrderStatus } from './order-status.enum';
+import { OrderService } from './order.service';
+
 
 // @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('api/orders')
@@ -20,9 +19,23 @@ export class OrderController {
   public async getAll(@Res() res, @Req() request): Promise<Orders[]> {
     const orders = await this.orderService.findAll(request.query);
 
+    return res.status(HttpStatus.OK).json(orders);
+  }
+
+  @Get('/paged')
+  public async getPaged(@Res() res: Response, @Req() request: Request) {
+    let { limit, page }: any = request.query;
+    limit = parseInt(limit || 0);
+    page = parseInt(page || 0);
+    const orderPaged = await this.orderService.findPaged(limit, page); 
+    
     return res.status(HttpStatus.OK).json({
-      orders: orders,
-      status: 200,
+      total: orderPaged.total,
+      page: orderPaged.page,
+      totalPages: orderPaged.totalPages,
+      limit: orderPaged.limit,
+      offset: orderPaged.offset,
+      instances: orderPaged.instaces
     });
   }
 
@@ -30,10 +43,7 @@ export class OrderController {
   public async getById(@Res() res, @Param('orderId') orderId: string): Promise<Orders> {
     const order = await this.orderService.findById(orderId);
 
-    return res.status(HttpStatus.OK).json({
-      order: order,
-      status: 200,
-    });
+    return res.status(HttpStatus.OK).json(order);
   }
 
   @Post()
@@ -47,12 +57,12 @@ export class OrderController {
       // const orderProduct = orderDto.products;
       
       // orderProduct.forEach(element => {
-      //   element.ordersId = order.id;
+      //   element.orderId = order.id;
       //   console.log(element)
       //   this.orderProductService.createOrderProduct(element);
       // });
-      this.orderProductService.createOrderProduct(order.id, orderDto.products);
 
+      this.orderProductService.createOrderProduct(order.id, orderDto.products);
 
       return res.status(HttpStatus.OK).json({
         message: 'Pedido cadastrado com sucesso.',

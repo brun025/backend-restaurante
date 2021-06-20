@@ -4,6 +4,15 @@ import { Orders } from './entities/orders.entity';
 import { LessThan, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 
+interface IOrderPaged {
+  total: number; 
+  page: number;
+  totalPages: number;
+  limit: number; 
+  offset: number;
+  instaces: Orders[];
+}
+
 @Injectable()
 export class OrderService {
   constructor(
@@ -45,6 +54,22 @@ export class OrderService {
 
     const orders = await this.orderRepository.find({where, relations: ["orderToProducts"]});
     return orders;
+  }
+
+  public async findPaged(limit: number, page: number): Promise<IOrderPaged> {
+    const ITENS_PER_PAGE = 100;
+    limit = limit > ITENS_PER_PAGE || limit <= 0 ? ITENS_PER_PAGE : limit;
+    const offset = page <= 0 ? 0 : page * limit;
+
+    const ordersPaged = await this.orderRepository.find({
+      order: { createdAt: 'ASC' },
+      skip: offset,
+      take: limit,
+    });
+
+    const total = await this.orderRepository.count({});
+    const totalPages = total > limit ? total / limit : 1;
+    return { total, page, totalPages, limit, offset, instaces: ordersPaged }
   }
 
   public async updateStatus(order: Orders, id: string): Promise<Orders> {

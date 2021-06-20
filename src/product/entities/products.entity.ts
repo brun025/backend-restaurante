@@ -30,6 +30,6 @@ export class Products {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => OrderProduct, productToOrder => productToOrder.orders)
-  public orderToProducts: OrderProduct[];
+  @OneToMany(() => OrderProduct, productToOrder => productToOrder.products)
+  orderToProducts: OrderProduct[];
 }
