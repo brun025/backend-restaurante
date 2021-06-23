@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/users.entity';
 import { IUsers } from './interfaces/users.interface';
-import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserProfileDto } from './dto/user-profile.dto';
 import { CreateUserDto } from './dto/create-user.dto';

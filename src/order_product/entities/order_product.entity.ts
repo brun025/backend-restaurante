@@ -16,19 +16,11 @@ export class OrderProduct {
   @Column()
   amount: number;
 
-  @Column({ type: 'varchar', length: 4000 })
+  @Column({ type: 'varchar', length: 4000, nullable: true })
   observation: string;
 
   @Column({ nullable: true })
   meet_options: string;
-
-  // @ManyToOne(() => Orders, order => order.orderToProducts, { lazy: true })
-  // @JoinColumn({ referencedColumnName: "id" })
-  // public orders: Orders;
-
-  // @ManyToOne(() => Products, product => product.orderToProducts, { lazy: true })
-  // @JoinColumn({ referencedColumnName: "id" })
-  // public products: Products;
 
   @ManyToOne(() => Orders, (orders) => orders.orderToProducts)
   @JoinColumn([{ name: "orderId", referencedColumnName: "id" }])

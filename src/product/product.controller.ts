@@ -175,6 +175,13 @@ export class ProductController {
     }
   }
 
+  @Get('/perSize/teste')
+  public async getBySize(@Res() res): Promise<any> {
+    const order = await this.productService.findBySize();
+
+    return res.status(HttpStatus.OK).json(order);
+  }
+
   @Delete("/:productId")
   public async delete(
     @Res() res,

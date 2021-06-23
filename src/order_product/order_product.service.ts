@@ -10,31 +10,21 @@ export class OrderProductService {
     private readonly orderProductRepository: Repository<OrderProduct>,
   ) {}
 
-  // public async createOrderProduct(order: any): Promise<any> {
-  //   try {
-  //     return await this.orderProductRepository.save(order);
-  //   } catch (err) {
-  //     throw new HttpException(err, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
-
   public async createOrderProduct(orderId: number, body: any): Promise<any> {
-    console.log('orderId', orderId);
-    console.log('body', body);
     try {
       const list = [];
 
       body.forEach(element => {
         list.push({
           amount: element.amount,
-          observation: element.observation,
+          observation: element.observation != undefined ? element.observation : null,
             // eslint-disable-next-line @typescript-eslint/camelcase
-          meet_options: element.meet_options,
+          meet_options: element.meet_options != undefined ? element.meet_options : null,
           orderId: orderId, 
           productId: element.product
         });
       });
-      console.log(list);
+      // console.log(list);
       return await this.orderProductRepository.save(list);
 
     } catch (err) {

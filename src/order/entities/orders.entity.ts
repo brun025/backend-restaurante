@@ -1,5 +1,6 @@
 import { OrderProduct } from 'src/order_product/entities/order_product.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { OrderStatus } from '../order-status.enum';
 
 @Entity()
 export class Orders {
@@ -36,8 +37,8 @@ export class Orders {
   @Column()
   withdrawal: string;
 
-  @Column()
-  status: string;
+  @Column({default: OrderStatus.INICIALIZADO})
+  status: OrderStatus;
 
   @Column({nullable: true})
   reference_point: string;

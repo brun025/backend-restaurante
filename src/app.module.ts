@@ -12,6 +12,7 @@ import { ProductModule } from "./product/product.module";
 import { AuthModule } from "./auth/auth.module";
 import { OrderModule } from "./order/order.module";
 import { OrderProductModule } from "./order_product/order_product.module";
+import { ShippingModule } from "./shipping/shipping.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { OrderProductModule } from "./order_product/order_product.module";
     ProductModule,
     OrderModule,
     OrderProductModule,
+    ShippingModule,
     ForgotPasswordModule,
     ChangePasswordModule,
     MailerModule.forRootAsync({

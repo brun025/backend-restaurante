@@ -52,16 +52,7 @@ export class OrderController {
     @Body() orderDto: OrderDto,
   ): Promise<any> {
     try {
-      orderDto.status = OrderStatus.INICIALIZADO;
       const order = await this.orderService.create(orderDto);
-      // const orderProduct = orderDto.products;
-      
-      // orderProduct.forEach(element => {
-      //   element.orderId = order.id;
-      //   console.log(element)
-      //   this.orderProductService.createOrderProduct(element);
-      // });
-
       this.orderProductService.createOrderProduct(order.id, orderDto.products);
 
       return res.status(HttpStatus.OK).json({
