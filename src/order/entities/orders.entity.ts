@@ -19,7 +19,7 @@ export class Orders {
   @Column()
   address_street: string;
 
-  @Column()
+  @Column('int')
   address_number: number;
 
   @Column()
@@ -28,7 +28,7 @@ export class Orders {
   @Column()
   address_city: string;
 
-  @Column()
+  @Column('float')
   cost_freight: number;
 
   @Column()
@@ -43,10 +43,10 @@ export class Orders {
   @Column({nullable: true})
   reference_point: string;
 
-  @Column({nullable: true})
+  @Column({nullable: true, type: 'float'})
   change_of_money: number;
 
-  @Column()
+  @Column('float')
   total: number;
 
   @CreateDateColumn()

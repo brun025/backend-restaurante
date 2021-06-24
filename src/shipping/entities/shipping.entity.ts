@@ -8,7 +8,7 @@ export class Shipping {
   @Column()
   cep: string;
 
-  @Column()
+  @Column('float')
   value: number;
 
   @CreateDateColumn()

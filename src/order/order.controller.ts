@@ -24,10 +24,7 @@ export class OrderController {
 
   @Get('/paged')
   public async getPaged(@Res() res: Response, @Req() request: Request) {
-    let { limit, page }: any = request.query;
-    limit = parseInt(limit || 0);
-    page = parseInt(page || 0);
-    const orderPaged = await this.orderService.findPaged(limit, page); 
+    const orderPaged = await this.orderService.findPaged(request.query); 
     
     return res.status(HttpStatus.OK).json({
       total: orderPaged.total,

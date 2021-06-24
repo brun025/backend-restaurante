@@ -21,7 +21,6 @@ export class ProductController {
 
   @Get('images/:imagename')
   public async findProfileImage(@Param('imagename') imagename, @Res() res: Response) {
-    console.log('Aqui', imagename);
     return of(res.sendFile(join(process.cwd(), `src/product/images/${imagename}`)));
   }
 
@@ -69,7 +68,7 @@ export class ProductController {
       if(productDto.image){
         const nameImage = (new Date()).valueOf().toString() + '.png';
         // console.log(productDto)
-        const base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
+        const base64Data = productDto.image.replace(/^data:image\/[a-z]+;base64,/, "");
   
         require("fs").writeFile(`./src/product/images/${nameImage}`, base64Data, 'base64', function(err) {
           console.log(err);
@@ -109,7 +108,7 @@ export class ProductController {
         if(productDto.image){
           const nameImage = (new Date()).valueOf().toString() + '.png';
           // console.log(productDto)
-          const base64Data = productDto.image.replace(/^data:image\/png;base64,/, "");
+          const base64Data = productDto.image.replace(/^data:image\/[a-z]+;base64,/, "");
     
           require("fs").writeFile(`./src/product/images/${nameImage}`, base64Data, 'base64', function(err) {
             console.log(err);
@@ -120,7 +119,7 @@ export class ProductController {
               });
             }
           });
-          productDto.image = `product/images/${nameImage}`;
+          productDto.image = `products/images/${nameImage}`;
         }
   
         await this.productService.update(productDto, productId);
