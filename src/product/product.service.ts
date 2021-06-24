@@ -45,25 +45,45 @@ export class ProductService {
   }
 
   public async findAll(query: any): Promise<Products[]> {
+    // let where = {};
+    // if(query.type){
+    //     where = {
+    //       type: query.type
+    //     }
+    // }
+    // if(query.status){
+    //   if(query.type){
+    //       where = {
+    //         type: query.type,
+    //         status: query.status
+    //       }
+    //   }
+    //   else{
+    //       where = {
+    //         type: query.type
+    //       }
+    //   }
+    // }
+
+    const objectWhere = {
+      status: null,
+      type: null,
+      size: null
+    };
+
+    if(query.status != undefined){
+      objectWhere.status = query.status;
+    }
+    if(query.type != undefined){
+      objectWhere.type = query.type;
+    }
+    if(query.size != undefined){
+      objectWhere.size = query.size;
+    }
+
     let where = {};
-    if(query.type){
-        where = {
-          type: query.type
-        }
-    }
-    if(query.status){
-      if(query.type){
-          where = {
-            type: query.type,
-            status: query.status
-          }
-      }
-      else{
-          where = {
-            type: query.type
-          }
-      }
-    }
+    where = Object.keys(objectWhere).filter((k) => objectWhere[k] != null)
+              .reduce((a, k) => ({ ...a, [k]: objectWhere[k] }), {});
 
     const products = await this.productRepository.find(where);
     return products;

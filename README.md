@@ -52,24 +52,6 @@ Once the database has been configured, start the Nest App via ```npm run start:d
 }
 ```
 
-## Install TypeScript Node
-
-```bash
-   $ npm install -g ts-node
-```
-
-## Running migrations with typeorm
-
-```bash
-   $ ts-node node_modules/.bin/typeorm migration:run
-```
-
-or
-
-```bash
-   $ node_modules/.bin/typeorm migration:run
-```
-
 ## Running the app
 
 ```bash
@@ -92,41 +74,3 @@ There is a `docker-compose.yml` file for starting MySQL with Docker.
 After running, you can stop the Docker container with
 
 `$ docker-compose down`
-
-## Getting secure resource with Curl
-
-```bash
-    $ curl -H 'content-type: application/json' -v -X GET http://127.0.0.1:3000/api/secure  -H 'Authorization: Bearer [:token]'
-```
-
-## Generate Token JWT Authentication with Curl
-
-```bash
-   $ curl -H 'content-type: application/json' -v -X POST -d '{"email": "tony_admin@nest.it", "password": "secret"}' http://127.0.0.1:3000/api/auth/login
-
-```
-
-## Registration user with Curl
-
-```bash
-   $ curl -H 'content-type: application/json' -v -X POST -d '{"name": "tony", "email": "tony_admin@nest.it", "username":"tony_admin", "password": "secret"}' http://127.0.0.1:3000/api/auth/register
-
-```
-
-## Forgot password with curl
-
-```bash
-   $ curl -H 'content-type: application/json' -v -X POST -d '{"email": "tony_admin@nest.it"}' http://127.0.0.1:3000/api/auth/forgot-password
-```
-
-## Change password User with curl
-
-```bash
-   $ curl -H 'content-type: application/json' -v -X POST -d '{"email": "tony_admin@nest.it", "password": "secret123"}' http://127.0.0.1:3000/api/auth/change-password  -H 'Authorization: Bearer [:token]'
-```
-
-## Update profile User with curl
-
-```bash
-   $ curl -H 'content-type: application/json' -v -X PUT -d '{"name": "tony", "email": "tony_admin@nest.it", "username": "tony_admin"}' http://127.0.0.1:3000/api/users/:id/profile  -H 'Authorization: Bearer [:token]'
-```
