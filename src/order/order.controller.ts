@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { OrderProductService } from 'src/order_product/order_product.service';
+import { Transaction } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 import { Orders } from './entities/orders.entity';
 import { OrderStatus } from './order-status.enum';
@@ -54,12 +55,45 @@ export class OrderController {
 
       return res.status(HttpStatus.OK).json({
         message: 'Pedido cadastrado com sucesso.',
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao cadastrar pedido!' + err,
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
+      });
+    }
+  }
+
+  @Put(':orderId')
+  // @Transaction()
+  public async updateOrder(
+    @Res() res,
+    @Body() orderDto: OrderDto,
+    @Param('orderId') orderId: string
+  ): Promise<any> {
+    try {
+      let order = await this.orderService.findById(orderId);
+      if(order){
+        order = await this.orderService.update(orderDto, orderId);
+        this.orderProductService.deleteProductFromOrder(order.id);
+        this.orderProductService.createOrderProduct(order.id, orderDto.products);
+
+        return res.status(HttpStatus.OK).json({
+          message: 'Pedido atualizado com sucesso.',
+          status: HttpStatus.OK,
+        });
+      }
+      else{
+        return res.status(HttpStatus.OK).json({
+          message: 'Pedido não encontrado.',
+          status: HttpStatus.NOT_FOUND,
+        });
+      }
+    } catch (err) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Erro ao atualizar pedido!' + err,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
@@ -78,19 +112,19 @@ export class OrderController {
   
         return res.status(HttpStatus.OK).json({
           message: 'Status atualizado com sucesso.',
-          status: 200,
+          status: HttpStatus.OK,
         });
       }
       else{
         return res.status(HttpStatus.OK).json({
           message: 'Pedido não encontrado.',
-          status: 200,
+          status: HttpStatus.NOT_FOUND,
         });
       }
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Erro ao atualizar status!',
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

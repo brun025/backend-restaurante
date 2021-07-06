@@ -22,23 +22,24 @@ import { RolesGuard } from "src/auth/roles.guard";
 import { Role } from "src/auth/role.decorator";
 import { UserRole } from "./user-roles.enum";
 
-// @UseGuards(AuthGuard(), RolesGuard)
+@UseGuards(AuthGuard(), RolesGuard)
 @Controller("/api/users")
 export class UsersController{
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  // @Role(UserRole.USER)
+  @Role(UserRole.ADMIN)
   public async getAll(@Res() res, @Req() req: any, ): Promise<Users[]> {
     const users = await this.usersService.findAll();
 
     return res.status(HttpStatus.OK).json({
       users: users,
-      status: 200,
+      status: HttpStatus.OK,
     });
   }
 
   @Get("/:userId")
+  @Role(UserRole.ADMIN)
     public async findById(
       @Res() res, 
       @Req() req: any,
@@ -47,11 +48,12 @@ export class UsersController{
       const user = await this.usersService.findById(userId);
       return res.status(HttpStatus.OK).json({
         user: user,
-        status: 200,
+        status: HttpStatus.OK,
       });
   }
 
-  @Post('/signup')
+  @Post()
+  @Role(UserRole.ADMIN)
   public async createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<{ message: string }> {
@@ -62,6 +64,7 @@ export class UsersController{
   }
 
   @Put("/:userId")
+  @Role(UserRole.ADMIN)
   public async updateProfileUser(
     @Res() res,
     @Param('userId') userId: string, 
@@ -71,18 +74,19 @@ export class UsersController{
       await this.usersService.updateProfileUser(userId, userProfileDto);
 
       return res.status(HttpStatus.OK).json({
-        message: "User Updated successfully!",
-        status: 200,
+        message: "Usuário atualizado com sucesso",
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: "Error: User not updated!",
-        status: 400,
+        message: "Erro ao atualizar usuário!",
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
 
   @Delete("/:userId/destroy")
+  @Role(UserRole.ADMIN)
   public async deleteUser(
     @Res() res,
     @Param('userId') userId: string
@@ -91,13 +95,13 @@ export class UsersController{
       await this.usersService.deleteUser(userId);
 
       return res.status(HttpStatus.OK).json({
-        message: "User Deleted successfully!",
-        status: 200,
+        message: "Usuário deletado com sucesso",
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: "Error: User not found!",
-        status: 400,
+        message: "Erro ao excluir usuário!",
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

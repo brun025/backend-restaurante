@@ -45,25 +45,6 @@ export class ProductService {
   }
 
   public async findAll(query: any): Promise<Products[]> {
-    // let where = {};
-    // if(query.type){
-    //     where = {
-    //       type: query.type
-    //     }
-    // }
-    // if(query.status){
-    //   if(query.type){
-    //       where = {
-    //         type: query.type,
-    //         status: query.status
-    //       }
-    //   }
-    //   else{
-    //       where = {
-    //         type: query.type
-    //       }
-    //   }
-    // }
 
     const objectWhere = {
       status: null,

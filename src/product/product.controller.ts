@@ -1,12 +1,15 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { join } from 'path';
 import { of } from 'rxjs';
+import { Role } from 'src/auth/role.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { UserRole } from 'src/users/user-roles.enum';
 import { ProductDto } from './dto/product.dto';
 import { Products } from './entities/products.entity';
 import { ProductService } from './product.service';
 
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('api/products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -59,6 +62,8 @@ export class ProductController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async create(
     @Res() res,
     @Body() productDto: ProductDto
@@ -97,6 +102,8 @@ export class ProductController {
   }
 
   @Put('/:productId')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async update(
     @Res() res,
     @Body() productDto: ProductDto,
@@ -106,12 +113,23 @@ export class ProductController {
       const product = await this.productService.findById(productId);
       if(product){
         if(productDto.image){
+          console.log(product.image.split('images/'))
+
+          if(product.image != null){
+            try {
+              require('fs').unlinkSync(`./src/product/images/${product.image.split('images/')[1]}`)
+              //file removed
+            } catch(err) {
+              console.error(err)
+            }
+          }
+
           const nameImage = (new Date()).valueOf().toString() + '.png';
           // console.log(productDto)
           const base64Data = productDto.image.replace(/^data:image\/[a-z]+;base64,/, "");
     
           require("fs").writeFile(`./src/product/images/${nameImage}`, base64Data, 'base64', function(err) {
-            console.log(err);
+            // console.log(err);
             if(err != null){
               return res.status(HttpStatus.BAD_REQUEST).json({
                 message: 'Erro ao salvar imagem!'+err,
@@ -126,7 +144,7 @@ export class ProductController {
   
         return res.status(HttpStatus.OK).json({
           message: 'Produto atualizado com sucesso.',
-          status: 200,
+          status: HttpStatus.OK,
         });
       }
       else{
@@ -182,6 +200,8 @@ export class ProductController {
   }
 
   @Delete("/:productId")
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async delete(
     @Res() res,
     @Param('productId') productId: string

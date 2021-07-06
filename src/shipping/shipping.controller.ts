@@ -8,11 +8,17 @@ import {
   Res,
   Param,
   HttpStatus,
+  UseGuards,
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
+import { Role } from "src/auth/role.decorator";
+import { RolesGuard } from "src/auth/roles.guard";
+import { UserRole } from "src/users/user-roles.enum";
 import { ShippingDto } from "./dto/shipping.dto";
 import { Shipping } from "./entities/shipping.entity";
 import { ShippingService } from "./shipping.service";
 
+// @UseGuards(AuthGuard(), RolesGuard)
 @Controller("/api/shippings")
 export class ShippingController{
   constructor(private readonly shippingService: ShippingService) {}
@@ -23,7 +29,7 @@ export class ShippingController{
 
     return res.status(HttpStatus.OK).json({
       shippings: shippings,
-      status: 200,
+      status: HttpStatus.OK,
     });
   }
 
@@ -35,11 +41,13 @@ export class ShippingController{
       const shipping = await this.shippingService.findById(shippingId);
       return res.status(HttpStatus.OK).json({
         shipping: shipping,
-        status: 200,
+        status: HttpStatus.OK,
       });
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async create(
     @Res() res,
     @Body() shippingDto: ShippingDto
@@ -49,17 +57,19 @@ export class ShippingController{
 
       return res.status(HttpStatus.OK).json({
         message: "Frete cadastrado com sucesso.",
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Erro ao cadastrar frete!",
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
 
   @Put("/:shippingId")
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async update(
     @Res() res,
     @Param('shippingId') shippingId: string, 
@@ -70,17 +80,19 @@ export class ShippingController{
 
       return res.status(HttpStatus.OK).json({
         message: "Frete atualizado com sucesso.",
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Erro ao atualizar frete!",
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }
 
   @Delete("/:shippingId/destroy")
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async delete(
     @Res() res,
     @Param('shippingId') shippingId: string
@@ -90,12 +102,12 @@ export class ShippingController{
 
       return res.status(HttpStatus.OK).json({
         message: "Frete deletado com sucesso",
-        status: 200,
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
         message: "Erro ao deletar frete",
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

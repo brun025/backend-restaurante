@@ -1,4 +1,5 @@
-import { MaxLength, IsNotEmpty, IsEmail } from 'class-validator';
+import { MaxLength, IsNotEmpty, IsEmail, ValidateIf, IsEnum } from 'class-validator';
+import { UserRole } from '../user-roles.enum';
 
 export class UserProfileDto {
   @IsNotEmpty({
@@ -30,4 +31,11 @@ export class UserProfileDto {
     message: 'O apelido deve ter menos de 20 caracteres',
   })
   username: string;
+
+  @ValidateIf(o => 'role' in o)
+  @IsNotEmpty({
+    message: 'Informe um perfil',
+  })
+  @IsEnum(UserRole)
+  role: string;
 }

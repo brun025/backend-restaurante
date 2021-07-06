@@ -32,4 +32,15 @@ export class OrderProductService {
     }
   }
 
+  public async deleteProductFromOrder(orderId: number): Promise<any> {
+    try {
+      return await this.orderProductRepository.delete({
+        orderId: orderId
+      });
+
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+  }
+
 }

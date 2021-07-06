@@ -119,4 +119,12 @@ export class OrderService {
     return order;
   }
 
+  public async update(orderDto: OrderDto, id: string): Promise<Orders> {
+    try {
+      return await this.orderRepository.save({ ...orderDto, id: Number(id) });
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+  }
+
 }

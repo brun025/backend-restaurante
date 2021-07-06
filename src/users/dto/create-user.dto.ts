@@ -4,7 +4,9 @@ import {
   MaxLength,
   MinLength,
   Matches,
+  IsEnum,
 } from 'class-validator';
+import { UserRole } from '../user-roles.enum';
 
 export class CreateUserDto {
   @IsNotEmpty({
@@ -49,6 +51,9 @@ export class CreateUserDto {
   // })
   password: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Informe um perfil',
+  })
+  @IsEnum(UserRole)
   role: string;
 }

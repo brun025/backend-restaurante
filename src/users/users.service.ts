@@ -22,7 +22,7 @@ export class UsersService{
     });
 
     if (!user) {
-      throw new NotFoundException(`User ${email} not found`);
+      throw new NotFoundException(`Usuário ${email} não encontrado`);
     }
 
     return user;
@@ -30,7 +30,7 @@ export class UsersService{
 
   public async findAll() {
     const users = await this.userRepository.find({
-      select:["name","username","email","role"]
+      select:["id", "name","username","email","role"]
     });
     return users;
   }
@@ -43,7 +43,7 @@ export class UsersService{
     });
 
     if (!user) {
-      throw new NotFoundException(`User #${userId} not found`);
+      throw new NotFoundException(`Usuário #${userId} não encontrado`);
     }
 
     return user;
@@ -51,6 +51,7 @@ export class UsersService{
 
   public async create(createUserDto: CreateUserDto): Promise<IUsers> {
     try {
+      createUserDto.password = bcrypt.hashSync(createUserDto.password, 8);
       return await this.userRepository.save(createUserDto);
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
@@ -94,6 +95,9 @@ export class UsersService{
       user.name = userProfileDto.name;
       user.email = userProfileDto.email;
       user.username = userProfileDto.username;
+      if(userProfileDto.role){
+        user.role = userProfileDto.role;
+      }
       
       return await this.userRepository.save(user);
     } catch (err) {

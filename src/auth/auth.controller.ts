@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Get('/me')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('jwt'))
   getMe(@GetUser() user: Users): Users {
     return user;
   }
