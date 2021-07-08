@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/orders.entity';
-import { LessThan, Repository } from 'typeorm';
+import { Between, LessThan, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 
 interface IOrderPaged {
@@ -36,15 +36,16 @@ export class OrderService {
       createdAt: null
     };
     if(query.status != undefined){
-      objectWhere.status = query.status
+      objectWhere.status = query.status;
     }
     if(query.client != undefined){
       // eslint-disable-next-line @typescript-eslint/camelcase
-      objectWhere.client_name = query.client
+      objectWhere.client_name = query.client;
 
     }
     if(query.data != undefined){
-      objectWhere.createdAt = LessThan(query.data + ' 23:59:59')
+      // objectWhere.createdAt = LessThan(query.data + ' 23:59:59')
+      objectWhere.createdAt = Between(query.data + ' 00:00:00', query.data + ' 23:59:59');
     }
 
     let where = {};
@@ -73,15 +74,15 @@ export class OrderService {
       createdAt: null
     };
     if(query.status != undefined){
-      objectWhere.status = query.status
+      objectWhere.status = query.status;
     }
     if(query.client != undefined){
       // eslint-disable-next-line @typescript-eslint/camelcase
-      objectWhere.client_name = query.client
+      objectWhere.client_name = query.client;
 
     }
     if(query.data != undefined){
-      objectWhere.createdAt = LessThan(query.data + ' 23:59:59')
+      objectWhere.createdAt = Between(query.data + ' 00:00:00', query.data + ' 23:59:59');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
