@@ -1,4 +1,4 @@
-import { OrderProduct } from 'src/order_product/entities/order_product.entity';
+import { OrderProduct } from '../../order_product/entities/order_product.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { OrderStatus } from '../order-status.enum';
 

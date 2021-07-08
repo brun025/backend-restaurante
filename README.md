@@ -74,3 +74,5 @@ There is a `docker-compose.yml` file for starting MySQL with Docker.
 After running, you can stop the Docker container with
 
 `$ docker-compose down`
+
+npm run test:watch -t src/product/product.controller.spec.ts
