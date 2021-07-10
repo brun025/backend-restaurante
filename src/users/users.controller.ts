@@ -32,10 +32,7 @@ export class UsersController{
   public async getAll(@Res() res, @Req() req: any, ): Promise<Users[]> {
     const users = await this.usersService.findAll();
 
-    return res.status(HttpStatus.OK).json({
-      users: users,
-      status: HttpStatus.OK,
-    });
+    return res.status(HttpStatus.OK).json(users);
   }
 
   @Get("/:userId")
@@ -46,10 +43,7 @@ export class UsersController{
       @Param('userId') userId: string,
     ): Promise<Users> {
       const user = await this.usersService.findById(userId);
-      return res.status(HttpStatus.OK).json({
-        user: user,
-        status: HttpStatus.OK,
-      });
+      return res.status(HttpStatus.OK).json(user);
   }
 
   @Post()
