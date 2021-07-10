@@ -22,6 +22,9 @@ export class OrderProduct {
   @Column({ nullable: true })
   meet_options: string;
 
+  @Column('float')
+  total_item: number;
+
   @ManyToOne(() => Orders, (orders) => orders.orderToProducts)
   @JoinColumn([{ name: "orderId", referencedColumnName: "id" }])
   orders: Orders;

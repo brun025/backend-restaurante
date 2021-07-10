@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,8 +19,8 @@ export class OrderProductService {
         list.push({
           amount: element.amount,
           observation: element.observation != undefined ? element.observation : null,
-            // eslint-disable-next-line @typescript-eslint/camelcase
           meet_options: element.meet_options != undefined ? element.meet_options : null,
+          total_item: element.total_item,
           orderId: orderId, 
           productId: element.product
         });

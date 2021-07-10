@@ -6,7 +6,7 @@ export class Shipping {
   id: number;
 
   @Column()
-  cep: string;
+  neighborhood: string;
 
   @Column('float')
   value: number;

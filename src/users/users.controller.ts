@@ -22,7 +22,7 @@ import { RolesGuard } from "src/auth/roles.guard";
 import { Role } from "src/auth/role.decorator";
 import { UserRole } from "./user-roles.enum";
 
-@UseGuards(AuthGuard(), RolesGuard)
+// @UseGuards(AuthGuard(), RolesGuard)
 @Controller("/api/users")
 export class UsersController{
   constructor(private readonly usersService: UsersService) {}

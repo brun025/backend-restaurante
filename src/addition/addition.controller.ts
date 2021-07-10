@@ -40,8 +40,8 @@ export class AdditionController{
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async create(
     @Res() res,
     @Body() additionDto: AdditionDto
@@ -62,8 +62,8 @@ export class AdditionController{
   }
 
   @Put("/:additionId")
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async update(
     @Res() res,
     @Param('additionId') additionId: string, 
@@ -85,8 +85,8 @@ export class AdditionController{
   }
 
   @Delete("/:additionId/destroy")
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async delete(
     @Res() res,
     @Param('additionId') additionId: string

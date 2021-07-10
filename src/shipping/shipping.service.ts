@@ -41,7 +41,7 @@ export class ShippingService{
   public async update(id: string, shippingDto: ShippingDto): Promise<Shipping> {
     try {
       const shipping = await this.shippingRepository.findOne({id: +id});
-      shipping.cep = shippingDto.cep;
+      shipping.neighborhood = shippingDto.neighborhood;
       shipping.value = shippingDto.value;
       
       return await this.shippingRepository.save(shipping);

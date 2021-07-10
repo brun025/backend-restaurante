@@ -14,4 +14,7 @@ export class OrderProductDto {
   @IsString()
   meet_options: string;
 
+  @IsNumber()
+  total_item: number;
+
 }

@@ -40,8 +40,8 @@ export class ShippingController{
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async create(
     @Res() res,
     @Body() shippingDto: ShippingDto
@@ -62,8 +62,8 @@ export class ShippingController{
   }
 
   @Put("/:shippingId")
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async update(
     @Res() res,
     @Param('shippingId') shippingId: string, 
@@ -85,8 +85,8 @@ export class ShippingController{
   }
 
   @Delete("/:shippingId/destroy")
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async delete(
     @Res() res,
     @Param('shippingId') shippingId: string

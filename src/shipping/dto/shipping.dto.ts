@@ -1,10 +1,10 @@
-import { MaxLength, IsNotEmpty, IsEmail, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class ShippingDto {
   @IsNotEmpty({
-    message: 'Informe um cep',
+    message: 'Informe um bairro',
   })
-  cep: string;
+  neighborhood: string;
 
   @IsNotEmpty({
     message: 'Informe um valor',
