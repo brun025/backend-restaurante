@@ -27,10 +27,7 @@ export class AdditionController{
   public async getAll(@Res() res ): Promise<Addition[]> {
     const additions = await this.additionService.findAll();
 
-    return res.status(HttpStatus.OK).json({
-      additions: additions,
-      status: HttpStatus.OK,
-    });
+    return res.status(HttpStatus.OK).json(additions);
   }
 
   @Get("/:additionId")
@@ -39,10 +36,7 @@ export class AdditionController{
       @Param('additionId') additionId: string,
     ): Promise<Addition> {
       const addition = await this.additionService.findById(additionId);
-      return res.status(HttpStatus.OK).json({
-        addition: addition,
-        status: HttpStatus.OK,
-      });
+      return res.status(HttpStatus.OK).json(addition);
   }
 
   @Post()

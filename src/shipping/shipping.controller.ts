@@ -27,10 +27,7 @@ export class ShippingController{
   public async getAll(@Res() res ): Promise<Shipping[]> {
     const shippings = await this.shippingService.findAll();
 
-    return res.status(HttpStatus.OK).json({
-      shippings: shippings,
-      status: HttpStatus.OK,
-    });
+    return res.status(HttpStatus.OK).json(shippings);
   }
 
   @Get("/:shippingId")
@@ -39,10 +36,7 @@ export class ShippingController{
       @Param('shippingId') shippingId: string,
     ): Promise<Shipping> {
       const shipping = await this.shippingService.findById(shippingId);
-      return res.status(HttpStatus.OK).json({
-        shipping: shipping,
-        status: HttpStatus.OK,
-      });
+      return res.status(HttpStatus.OK).json(shipping);
   }
 
   @Post()
