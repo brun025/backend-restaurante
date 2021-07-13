@@ -30,7 +30,7 @@ export class UsersService{
 
   public async findAll() {
     const users = await this.userRepository.find({
-      select:["id", "name","username","email","role"]
+      select:["id", "name","username","email","role", "createdAt"]
     });
     return users;
   }
