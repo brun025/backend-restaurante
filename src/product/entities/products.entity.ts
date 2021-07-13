@@ -1,5 +1,5 @@
 import { OrderProduct } from 'src/order_product/entities/order_product.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from 'typeorm';
 import { ProductSize } from '../product-size.enum';
 import { ProductType } from '../product-type.enum';
 @Entity()
@@ -33,6 +33,9 @@ export class Products {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @OneToMany(() => OrderProduct, productToOrder => productToOrder.products)
   orderToProducts: OrderProduct[];

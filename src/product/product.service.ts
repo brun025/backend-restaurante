@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Products } from './entities/products.entity';
 import { Repository } from 'typeorm';
@@ -81,7 +81,17 @@ export class ProductService {
 
   public async delete(id: string): Promise<any> {
     try {
-      return await this.productRepository.delete(+id);
+      const product = await this.productRepository.findOne({
+        where: {
+          id: id
+        }
+      });
+
+      if(!product){
+        throw new NotFoundException(`Produto #${id} não encontrado`);
+      }
+
+      return await this.productRepository.softRemove(product);
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }

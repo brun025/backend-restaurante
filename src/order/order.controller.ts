@@ -7,8 +7,6 @@ import { Orders } from './entities/orders.entity';
 import { OrderStatus } from './order-status.enum';
 import { OrderService } from './order.service';
 
-
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('api/orders')
 export class OrderController {
   constructor(
@@ -17,6 +15,7 @@ export class OrderController {
     ) {}
 
   @Get()
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getAll(@Res() res, @Req() request): Promise<Orders[]> {
     const orders = await this.orderService.findAll(request.query);
 
@@ -38,6 +37,7 @@ export class OrderController {
   }
 
   @Get('/:orderId')
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getById(@Res() res, @Param('orderId') orderId: string): Promise<Orders> {
     const order = await this.orderService.findById(orderId);
 
@@ -66,7 +66,8 @@ export class OrderController {
   }
 
   @Put(':orderId')
-  // @Transaction()
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async updateOrder(
     @Res() res,
     @Body() orderDto: OrderDto,
@@ -99,6 +100,7 @@ export class OrderController {
   }
 
   @Put('/:orderId/changeStatus')
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async update(
     @Res() res,
     @Body() orderStatus: any,

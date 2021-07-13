@@ -1,4 +1,4 @@
-import { MaxLength, IsString, IsNumber, ValidateIf } from 'class-validator';
+import { MaxLength, IsString, IsNumber, ValidateIf, IsNotEmpty } from 'class-validator';
 
 export class OrderProductDto {
   readonly id: number;
@@ -7,6 +7,9 @@ export class OrderProductDto {
   @MaxLength(4000)
   observation: string;
 
+  @IsNotEmpty({
+    message: 'Informe a quantidade do produto',
+  })
   @IsNumber()
   amount: number;
 
@@ -14,6 +17,9 @@ export class OrderProductDto {
   @IsString()
   meet_options: string;
 
+  @IsNotEmpty({
+    message: 'Informe o valor total do produto',
+  })
   @IsNumber()
   total_item: number;
 

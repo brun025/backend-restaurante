@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { join } from 'path';
@@ -162,6 +162,8 @@ export class ProductController {
   }
 
   @Put('/:productId/update-status')
+  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  // @Role(UserRole.ADMIN)
   public async updateStatus(
     @Res() res,
     @Body() body: any,

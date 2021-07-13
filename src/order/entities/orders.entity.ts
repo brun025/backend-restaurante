@@ -10,25 +10,25 @@ export class Orders {
   @Column()
   client_name: string;
 
-  @Column()
+  @Column({nullable: true})
   phone: string;
 
-  @Column()
+  @Column({nullable: true})
   cep: string;
 
-  @Column()
+  @Column({nullable: true})
   address_street: string;
 
-  @Column('int')
+  @Column({nullable: true, type: 'int'})
   address_number: number;
 
-  @Column()
+  @Column({nullable: true})
   address_neighborhood: string;
 
-  @Column()
+  @Column({nullable: true})
   address_city: string;
 
-  @Column('float')
+  @Column({nullable: true, type: 'float'})
   cost_freight: number;
 
   @Column()
