@@ -62,8 +62,8 @@ export class ProductController {
   }
 
   @Post()
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Role(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async create(
     @Res() res,
     @Body() productDto: ProductDto
@@ -102,8 +102,8 @@ export class ProductController {
   }
 
   @Put('/:productId')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Role(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async update(
     @Res() res,
     @Body() productDto: ProductDto,
@@ -162,8 +162,8 @@ export class ProductController {
   }
 
   @Put('/:productId/update-status')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Role(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async updateStatus(
     @Res() res,
     @Body() body: any,
@@ -202,8 +202,8 @@ export class ProductController {
   }
 
   @Delete("/:productId")
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Role(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async delete(
     @Res() res,
     @Param('productId') productId: string
