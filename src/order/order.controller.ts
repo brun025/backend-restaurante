@@ -1,6 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
+import { Role } from 'src/auth/role.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { OrderProductService } from 'src/order_product/order_product.service';
+import { UserRole } from 'src/users/user-roles.enum';
 import { Transaction } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 import { Orders } from './entities/orders.entity';
@@ -15,7 +19,7 @@ export class OrderController {
     ) {}
 
   @Get()
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getAll(@Res() res, @Req() request): Promise<Orders[]> {
     const orders = await this.orderService.findAll(request.query);
 
@@ -37,7 +41,7 @@ export class OrderController {
   }
 
   @Get('/:orderId')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getById(@Res() res, @Param('orderId') orderId: string): Promise<Orders> {
     const order = await this.orderService.findById(orderId);
 
@@ -66,8 +70,8 @@ export class OrderController {
   }
 
   @Put(':orderId')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
-  // @Role(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(UserRole.ADMIN)
   public async updateOrder(
     @Res() res,
     @Body() orderDto: OrderDto,
@@ -100,7 +104,7 @@ export class OrderController {
   }
 
   @Put('/:orderId/changeStatus')
-  // @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async update(
     @Res() res,
     @Body() orderStatus: any,
