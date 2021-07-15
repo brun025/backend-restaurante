@@ -11,8 +11,13 @@ export class AdditionService{
     private readonly additionRepository: Repository<Addition>,
   ) {}
 
-  public async findAll() {
-    const additions = await this.additionRepository.find();
+  public async findAll(query: any) {
+    let where = { status: null };
+
+    if(query.status != undefined) where.status = query.status;
+    else where = null;
+
+    const additions = await this.additionRepository.find(where);
     return additions;
   }
 
@@ -45,6 +50,14 @@ export class AdditionService{
       addition.price = additionDto.price;
       
       return await this.additionRepository.save(addition);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async updateStatus(body: any, id: string): Promise<Addition> {
+    try {
+      return await this.additionRepository.save({ ...body, id: Number(id) });
     } catch (err) {
       throw new HttpException(err, HttpStatus.BAD_REQUEST);
     }

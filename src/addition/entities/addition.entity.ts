@@ -11,6 +11,9 @@ export class Addition {
   @Column('float')
   price: number;
 
+  @Column({default: true})
+  status: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

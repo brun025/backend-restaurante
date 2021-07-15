@@ -17,8 +17,6 @@ import { UserRole } from "src/users/user-roles.enum";
 import { ShippingDto } from "./dto/shipping.dto";
 import { Shipping } from "./entities/shipping.entity";
 import { ShippingService } from "./shipping.service";
-
-// @UseGuards(AuthGuard(), RolesGuard)
 @Controller("/api/shippings")
 export class ShippingController{
   constructor(private readonly shippingService: ShippingService) {}

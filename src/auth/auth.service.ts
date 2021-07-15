@@ -50,6 +50,7 @@ export class AuthService {
     };
     const token = await this.jwtService.sign(jwtPayload);
 
+    delete user.password;
     return { data: {"user": user, "token": token} };
   }
 
