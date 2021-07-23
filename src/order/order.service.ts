@@ -1,8 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/orders.entity';
-import { Between, LessThan, Repository } from 'typeorm';
+import { Between, In, LessThan, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
+import { OrderStatus } from './order-status.enum';
 
 interface IOrderPaged {
   total: number; 
@@ -51,7 +52,6 @@ export class OrderService {
     let where = {};
     where = Object.keys(objectWhere).filter((k) => objectWhere[k] != null)
               .reduce((a, k) => ({ ...a, [k]: objectWhere[k] }), {});
-    // console.log(where)
 
     const orders = await this.orderRepository.find({where, relations: ["orderToProducts"]});
     return orders;
@@ -59,7 +59,7 @@ export class OrderService {
 
   public async findPaged(query: any): Promise<IOrderPaged> {
     let { limit, page }: any = query;
-    console.log(query);
+    // console.log(query);
     limit = parseInt(limit || 0);
     page = parseInt(page || 0);
 
@@ -68,7 +68,7 @@ export class OrderService {
     const offset = page <= 0 ? 0 : page * limit;
 
     const objectWhere = {
-      status: null,
+      status: In([OrderStatus.ANDAMENTO, OrderStatus.INICIALIZADO]),
       // eslint-disable-next-line @typescript-eslint/camelcase
       client_name: null,
       createdAt: null

@@ -4,6 +4,7 @@ import { Response, Request } from 'express';
 import { Role } from 'src/auth/role.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { OrderProductService } from 'src/order_product/order_product.service';
+import { ProductService } from 'src/product/product.service';
 import { UserRole } from 'src/users/user-roles.enum';
 import { Transaction } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
@@ -15,7 +16,8 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
-    private readonly orderProductService: OrderProductService
+    private readonly orderProductService: OrderProductService,
+    private readonly productService: ProductService
     ) {}
 
   @Get()
@@ -54,6 +56,19 @@ export class OrderController {
     @Body() orderDto: OrderDto,
   ): Promise<any> {
     try {
+      const products = [];
+      orderDto.products.forEach(element => {
+        products.push(element.product);
+      });
+
+      const productsActive = await this.productService.findActive(products);
+      if (productsActive.some(e => !e.status)) {
+        return res.status(HttpStatus.BAD_REQUEST).json({
+          message: 'Alguns produtos estão indisponíveis no momento.',
+          status: HttpStatus.BAD_REQUEST,
+        });
+      }
+
       const order = await this.orderService.create(orderDto);
       this.orderProductService.createOrderProduct(order.id, orderDto.products);
 

@@ -79,6 +79,11 @@ export class ProductService {
     return product;
   }
 
+  public async findActive(ids: any): Promise<any> {
+    const products = await this.productRepository.findByIds(ids);
+    return products;
+  }
+
   public async delete(id: string): Promise<any> {
     try {
       const product = await this.productRepository.findOne({
