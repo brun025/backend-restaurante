@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Products } from './entities/products.entity';
 import { ProductSize } from './product-size.enum';
 import { ProductType } from './product-type.enum';
-import { ProductController } from './product.controller';
+//import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 
 const productsList: Products[] = [
@@ -38,7 +38,7 @@ const productsList: Products[] = [
 ];
 
 describe('Product Service', () => {
-  let productController: ProductController;
+  //let productController: ProductController;
   let productService: ProductService;
 
   const mockRepository = {
@@ -55,7 +55,7 @@ describe('Product Service', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ProductController],
+      //controllers: [ProductController],
       providers: [
         ProductService,
         {
@@ -65,7 +65,7 @@ describe('Product Service', () => {
       ],
     }).compile();
 
-    productController = module.get<ProductController>(ProductController);
+    //productController = module.get<ProductController>(ProductController);
     productService = module.get<ProductService>(ProductService);
   });
 
@@ -82,19 +82,32 @@ describe('Product Service', () => {
   });
 
   it('should be defined', () => {
-    expect(productController).toBeDefined();
+    //expect(productController).toBeDefined();
     expect(productService).toBeDefined();
   });
+
+  describe('create', () => {
+    it('should create a new todo entity item successfully', async () => {
+      
+      const result = await productService.create(productsList[0]);
+
+      expect(result).not.toEqual(null);
+  
+    });
+
+  });
+  
+  /*
 
   describe('getAll', () => {
     it('should return a product list successfully', async () => {
       const get = productsList;
       mockRepository.findAll.mockReturnValue([get]);
       const results = await  productController.getAll({}, {});
-      expect(results).toHaveLength(2);
+      expect(mockRepository.findAll).toHaveBeenCalledTimes(1);
     });
   });
-  /*
+
   describe('getAll', () => {
     it('should return a product list successfully', async () => {
       const result = await productService.findAll({});
