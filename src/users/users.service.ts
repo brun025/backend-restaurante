@@ -45,7 +45,8 @@ export class UsersService{
     if (!user) {
       throw new NotFoundException(`Usuário #${userId} não encontrado`);
     }
-
+    
+    delete user.password;
     return user;
   }
 

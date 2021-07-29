@@ -47,11 +47,13 @@ export class AuthService {
 
     const jwtPayload = {
       id: user.id,
+      username: user.username,
+      role: user.role
     };
-    const token = await this.jwtService.sign(jwtPayload);
+    const token = this.jwtService.sign(jwtPayload);
 
     delete user.password;
-    return { data: {"user": user, "token": token} };
+    return { "token": token };
   }
 
 }
