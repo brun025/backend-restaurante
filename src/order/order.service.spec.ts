@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrderService } from './order.service';
+import { Orders } from './entities/orders.entity';
+
 
 describe('RegisterService', () => {
   let service: OrderService;

@@ -1,4 +1,4 @@
-import { OrderProduct } from 'src/order_product/entities/order_product.entity';
+import { OrderProduct } from '../../order_product/entities/order_product.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from 'typeorm';
 import { ProductSize } from '../product-size.enum';
 import { ProductType } from '../product-type.enum';
@@ -51,6 +51,8 @@ export class Products {
     this.image = product?.image;
     this.createdAt = product?.createdAt;
     this.updatedAt = product?.updatedAt;
+    this.deletedAt = product?.deletedAt;
     this.orderToProducts = product?.orderToProducts;
   }
 }
+

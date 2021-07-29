@@ -1,4 +1,4 @@
-import { OrderProduct } from 'src/order_product/entities/order_product.entity';
+import { OrderProduct } from '../../order_product/entities/order_product.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { OrderStatus } from '../order-status.enum';
 
@@ -57,4 +57,25 @@ export class Orders {
 
   @OneToMany(() => OrderProduct, orderToProduct => orderToProduct.orders, {eager: true})
   orderToProducts: OrderProduct[];
+
+  constructor(order?: Partial<Orders>){
+    this.id = order?.id;
+    this.client_name = order?.client_name;
+    this.phone= order?.phone;
+    this.cep = order?.cep;
+    this.address_street = order?.address_street;
+    this.address_number = order?.address_number;
+    this.address_neighborhood = order?.address_neighborhood;
+    this.address_city = order?.address_city;
+    this.cost_freight = order?.cost_freight;
+    this.payment = order?.payment;
+    this.withdrawal = order?.withdrawal;
+    this.status = order?.status;
+    this.reference_point = order?.reference_point;
+    this.change_of_money = order?.change_of_money;
+    this.total = order?.total;
+    this.createdAt = order?.createdAt;
+    this.updatedAt = order?.updatedAt;
+    this.orderToProducts = order?.orderToProducts;
+  }
 }
