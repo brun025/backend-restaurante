@@ -86,7 +86,6 @@ export class OrderController {
 
   @Put(':orderId')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
   public async updateOrder(
     @Res() res,
     @Body() orderDto: OrderDto,
