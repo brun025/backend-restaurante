@@ -36,7 +36,6 @@ export class UsersController{
   }
 
   @Get("/:userId")
-  @Role(UserRole.ADMIN)
     public async findById(
       @Res() res, 
       @Req() req: any,

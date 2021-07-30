@@ -47,6 +47,10 @@ export class UsersService{
     }
     
     delete user.password;
+    delete user.name;
+    delete user.email;
+    delete user.createdAt;
+    delete user.updatedAt;
     return user;
   }
 

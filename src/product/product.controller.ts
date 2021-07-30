@@ -163,7 +163,6 @@ export class ProductController {
 
   @Put('/:productId/update-status')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(UserRole.ADMIN)
   public async updateStatus(
     @Res() res,
     @Body() body: any,
