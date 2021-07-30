@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/orders.entity';
-import { Between, In, LessThan, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 import { OrderStatus } from './order-status.enum';
 
@@ -97,7 +97,7 @@ export class OrderService {
       where
     });
 
-    const total = await this.orderRepository.count({});
+    const total = await this.orderRepository.count({where});
     const totalPages = total > limit ? total / limit : 1;
     return { total, page, totalPages, limit, offset, instaces: ordersPaged }
   }
