@@ -86,17 +86,13 @@ describe('Product Service', () => {
     expect(productService).toBeDefined();
   });
 
-  describe('create', () => {
-    it('should create a new todo entity item successfully', async () => {
-      
-      const result = await productService.create(productsList[0]);
-
-      expect(result).not.toEqual(null);
   
+  describe('getByID', () => {
+    it('should return a product successfully', async () => {
+      const result = await productService.findById('1');
+      expect(result).toEqual(productsList[0]);
     });
-
   });
-  
   /*
 
   describe('getAll', () => {
