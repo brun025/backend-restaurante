@@ -10,7 +10,7 @@ import { ChangePasswordService } from '../change-password/change-password.servic
 import { AuthGuard } from '@nestjs/passport';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 @Controller('api/auth/change-password')
 export class ChangePasswordController {
   constructor(private readonly changePasswordService: ChangePasswordService) {}
@@ -24,13 +24,13 @@ export class ChangePasswordController {
       await this.changePasswordService.changePassword(changePasswordDto);
 
       return res.status(HttpStatus.OK).json({
-        message: 'Request Change Password Successfully!',
-        status: 200,
+        message: 'Senha alterada com sucesso!',
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: 'Error: Change password failed!',
-        status: 400,
+        message: 'Erro ao alterar senha!',
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

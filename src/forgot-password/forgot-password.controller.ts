@@ -15,13 +15,13 @@ export class ForgotPasswordController {
       await this.forgotPasswordService.forgotPassword(forgotPasswordDto);
 
       return res.status(HttpStatus.OK).json({
-        message: "Request Reset Password Successfully!",
-        status: 200,
+        message: "E-mail enviado para alteração de senha",
+        status: HttpStatus.OK,
       });
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json({
-        message: "Error: Forgot password failed!",
-        status: 400,
+        message: "Erro ao enviar e-mail! " + err,
+        status: HttpStatus.BAD_REQUEST,
       });
     }
   }

@@ -42,6 +42,21 @@ export class OrderController {
     });
   }
 
+  @Get('/historic/paged')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  public async getHistoricPaged(@Res() res: Response, @Req() request: Request) {
+    const orderPaged = await this.orderService.findHistoricPaged(request.query); 
+    
+    return res.status(HttpStatus.OK).json({
+      total: orderPaged.total,
+      page: orderPaged.page,
+      totalPages: orderPaged.totalPages,
+      limit: orderPaged.limit,
+      offset: orderPaged.offset,
+      instances: orderPaged.instaces
+    });
+  }
+
   @Get('/:orderId')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getById(@Res() res, @Param('orderId') orderId: string): Promise<Orders> {

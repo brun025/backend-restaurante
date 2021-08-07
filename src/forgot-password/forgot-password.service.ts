@@ -5,6 +5,7 @@ import { Users } from '../users/entities/users.entity';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import * as bcrypt from 'bcrypt';
+import * as path from 'path';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -15,7 +16,7 @@ export class ForgotPasswordService {
   ) {}
 
   public async forgotPassword(
-    forgotPasswordDto: ForgotPasswordDto,
+    forgotPasswordDto: ForgotPasswordDto
   ): Promise<any> {
     const userUpdate = await this.userRepository.findOne({
       email: forgotPasswordDto.email,
@@ -26,26 +27,27 @@ export class ForgotPasswordService {
     userUpdate.password = bcrypt.hashSync(passwordRand, 8);
 
     this.sendMailForgotPassword(userUpdate.email, passwordRand);
-
     return await this.userRepository.save(userUpdate);
+
   }
 
-  private sendMailForgotPassword(email, password): void {
+  private sendMailForgotPassword(email, password) {
     this.mailerService
       .sendMail({
         to: email,
-        from: 'from@example.com',
-        subject: 'Forgot Password successful ✔',
-        text: 'Forgot Password successful!',
-        template: 'index',
+        from: 'fuser263@gmail.com',
+        subject: 'Reset de senha ✔',
+        text: 'Reset de senha!',
+        template: path.resolve(__dirname, '..', '..', 'templates', 'emails', 'index'),
         context: {
-          title: 'Forgot Password successful!',
+          host: '#',
+          title: 'Reset de senha!',
           description:
-            'Request Reset Password Successfully!  ✔, This is your new password: ' +
-            password,
+            'Senha alterada com sucesso! Essa é a sua nova senha temporária: ' +
+            password + ', caso queira atualizar sua senha clique no botão abaixo.'
         },
       })
-      .then(response => {
+      .then(async response => {
         console.log(response);
         console.log('Forgot Password: Send Mail successfully!');
       })

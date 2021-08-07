@@ -102,6 +102,51 @@ export class OrderService {
     return { total, page, totalPages, limit, offset, instaces: ordersPaged }
   }
 
+  public async findHistoricPaged(query: any): Promise<IOrderPaged> {
+    let { limit, page }: any = query;
+    // console.log(query);
+    limit = parseInt(limit || 0);
+    page = parseInt(page || 0);
+
+    const ITENS_PER_PAGE = 100;
+    limit = limit > ITENS_PER_PAGE || limit <= 0 ? ITENS_PER_PAGE : limit;
+    const offset = page <= 0 ? 0 : page * limit;
+
+    const objectWhere = {
+      status: In([OrderStatus.CANCELADO, OrderStatus.ENTREGUE, OrderStatus.PRONTO]),
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      client_name: null,
+      createdAt: null
+    };
+    if(query.status != undefined){
+      objectWhere.status = query.status;
+    }
+    if(query.client != undefined){
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      objectWhere.client_name = query.client;
+
+    }
+    if(query.data != undefined){
+      objectWhere.createdAt = Between(query.data + ' 00:00:00', query.data + ' 23:59:59');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let where = {};
+    where = Object.keys(objectWhere).filter((k) => objectWhere[k] != null)
+              .reduce((a, k) => ({ ...a, [k]: objectWhere[k] }), {});
+
+    const ordersPaged = await this.orderRepository.find({
+      order: { createdAt: 'ASC' },
+      skip: offset,
+      take: limit,
+      where
+    });
+
+    const total = await this.orderRepository.count({where});
+    const totalPages = total > limit ? total / limit : 1;
+    return { total, page, totalPages, limit, offset, instaces: ordersPaged }
+  }
+
   public async updateStatus(order: Orders, id: string): Promise<Orders> {
     try {
       return await this.orderRepository.save({ ...order, id: Number(id) });
