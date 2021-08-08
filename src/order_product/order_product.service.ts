@@ -44,4 +44,18 @@ export class OrderProductService {
     }
   }
 
+  public async bestSellers(): Promise<any> {
+    const products = await this.orderProductRepository.query(`
+      select sum(op.total_item) as value, p.name 
+      from order_product op 
+      inner join products p 
+      on op.productId = p.id
+      where op.createdAt >= NOW() - INTERVAL 1 DAY
+      group by p.id,p.name
+      order by p.name
+    `)
+
+    return products;
+  }
+
 }

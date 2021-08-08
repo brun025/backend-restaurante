@@ -164,4 +164,12 @@ export class OrderController {
     }
   }
 
+  @Get('/bestSellers/dashboard')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  public async bestSellers(@Res() res): Promise<any> {
+    const products = await this.orderProductService.bestSellers();
+
+    return res.status(HttpStatus.OK).json(products);
+  }
+
 }

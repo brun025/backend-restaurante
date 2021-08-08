@@ -120,12 +120,6 @@ export class ProductService {
   }
 
   public async findBySize(): Promise<any> {
-    // const products = await this.productRepository.createQueryBuilder('products')
-    // .select("products.price")
-    // .where('products.size is not null')
-    // .groupBy("products.size, products.price")
-    // .getMany();
-
     const products = await this.productRepository.query(`
       select sum(products.price)/count(products.size) as price, products.size 
       from products 

@@ -1,6 +1,6 @@
 import { Orders } from 'src/order/entities/orders.entity';
 import { Products } from 'src/product/entities/products.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class OrderProduct {
@@ -24,6 +24,9 @@ export class OrderProduct {
 
   @Column('float')
   total_item: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToOne(() => Orders, (orders) => orders.orderToProducts)
   @JoinColumn([{ name: "orderId", referencedColumnName: "id" }])
