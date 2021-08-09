@@ -31,6 +31,7 @@ export class ChangePasswordService {
         text: 'Alteração de senha!',
         template: path.resolve(__dirname, '..', '..', 'templates', 'emails', 'index'),
         context: {
+          display: 'none',
           host: '#',
           title: 'Senha alterada com sucesso!',
           description:

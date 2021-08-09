@@ -40,6 +40,7 @@ export class ForgotPasswordService {
         text: 'Reset de senha!',
         template: path.resolve(__dirname, '..', '..', 'templates', 'emails', 'index'),
         context: {
+          display: 'block',
           host: '#',
           title: 'Reset de senha!',
           description:

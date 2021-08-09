@@ -68,7 +68,7 @@ export class OrderService {
     const offset = page <= 0 ? 0 : page * limit;
 
     const objectWhere = {
-      status: In([OrderStatus.ANDAMENTO, OrderStatus.INICIALIZADO]),
+      status: In([OrderStatus.ANDAMENTO, OrderStatus.INICIALIZADO, OrderStatus.PRONTO]),
       // eslint-disable-next-line @typescript-eslint/camelcase
       client_name: null,
       createdAt: null
@@ -113,7 +113,7 @@ export class OrderService {
     const offset = page <= 0 ? 0 : page * limit;
 
     const objectWhere = {
-      status: In([OrderStatus.CANCELADO, OrderStatus.ENTREGUE, OrderStatus.PRONTO]),
+      status: In([OrderStatus.CANCELADO, OrderStatus.ENTREGUE]),
       // eslint-disable-next-line @typescript-eslint/camelcase
       client_name: null,
       createdAt: null
