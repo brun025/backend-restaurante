@@ -29,6 +29,7 @@ export class OrderController {
   }
 
   @Get('/paged')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getPaged(@Res() res: Response, @Req() request: Request) {
     const orderPaged = await this.orderService.findPaged(request.query); 
     
@@ -110,8 +111,8 @@ export class OrderController {
       let order = await this.orderService.findById(orderId);
       if(order){
         order = await this.orderService.update(orderDto, orderId);
-        this.orderProductService.deleteProductFromOrder(order.id);
-        this.orderProductService.createOrderProduct(order.id, orderDto.products);
+        await this.orderProductService.deleteProductFromOrder(order.id);
+        await this.orderProductService.createOrderProduct(order.id, orderDto.products);
 
         return res.status(HttpStatus.OK).json({
           message: 'Pedido atualizado com sucesso.',
