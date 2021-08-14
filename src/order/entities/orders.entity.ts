@@ -57,4 +57,31 @@ export class Orders {
 
   @OneToMany(() => OrderProduct, orderToProduct => orderToProduct.orders, {eager: true})
   orderToProducts: OrderProduct[];
+
+  constructor(order?: Partial<Orders>){
+    this.id = order?.id;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.client_name = order?.client_name;
+    this.phone = order?.phone;
+    this.cep = order?.cep;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.address_street = order?.address_street;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.address_neighborhood = order?.address_neighborhood;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.address_city = order?.address_city;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.cost_freight = order?.cost_freight;
+    this.payment = order?.payment;
+    this.withdrawal = order?.withdrawal;
+    this.status = order?.status;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.reference_point = order?.reference_point;
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.change_of_money = order?.change_of_money;
+    this.total = order?.total;
+    this.createdAt = order?.createdAt;
+    this.updatedAt = order?.updatedAt;
+    this.orderToProducts = order?.orderToProducts;
+  }
 }

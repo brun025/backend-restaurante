@@ -16,4 +16,10 @@ export class Shipping {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  constructor(shipping?: Partial<Shipping>){
+    this.id = shipping?.id;
+    this.neighborhood = shipping?.neighborhood;
+    this.value = shipping?.value;
+  }
 }
