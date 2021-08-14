@@ -11,9 +11,9 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Role } from "src/auth/role.decorator";
-import { RolesGuard } from "src/auth/roles.guard";
-import { UserRole } from "src/users/user-roles.enum";
+import { Role } from "../../src/auth/role.decorator";
+import { RolesGuard } from "../../src/auth/roles.guard";
+import { UserRole } from "../../src/users/user-roles.enum";
 import { ShippingDto } from "./dto/shipping.dto";
 import { Shipping } from "./entities/shipping.entity";
 import { ShippingService } from "./shipping.service";
