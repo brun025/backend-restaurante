@@ -1,11 +1,11 @@
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { join } from 'path';
 import { of } from 'rxjs';
-import { Role } from 'src/auth/role.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { UserRole } from 'src/users/user-roles.enum';
+import { Role } from '../../src/auth/role.decorator';
+import { RolesGuard } from '../../src/auth/roles.guard';
+import { UserRole } from '../../src/users/user-roles.enum';
 import { ProductDto } from './dto/product.dto';
 import { Products } from './entities/products.entity';
 import { ProductService } from './product.service';
