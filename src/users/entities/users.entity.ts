@@ -27,4 +27,15 @@ export class Users {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  constructor(user?: Partial<Users>){
+    this.id = user?.id;
+    this.name = user?.name;
+    this.username = user?.username;
+    this.email = user?.email;
+    this.password = user?.password;
+    this.role = user?.role;
+    this.createdAt = user?.createdAt;
+    this.updatedAt = user?.updatedAt;
+  }
 }

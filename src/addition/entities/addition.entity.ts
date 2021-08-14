@@ -19,4 +19,13 @@ export class Addition {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  constructor(addition?: Partial<Addition>){
+    this.id = addition?.id;
+    this.name = addition?.name;
+    this.price = addition?.price;
+    this.status = addition?.status;
+    this.createdAt = addition?.createdAt;
+    this.updatedAt = addition?.updatedAt;
+  }
 }
