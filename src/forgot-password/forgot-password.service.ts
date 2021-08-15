@@ -41,7 +41,7 @@ export class ForgotPasswordService {
         template: path.resolve(__dirname, '..', '..', 'templates', 'emails', 'index'),
         context: {
           display: 'block',
-          host: '#',
+          host: 'http://localhost:4200/#/recuperar-senha',
           title: 'Reset de senha!',
           description:
             'Senha alterada com sucesso! Essa é a sua nova senha temporária: ' +

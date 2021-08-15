@@ -173,4 +173,12 @@ export class OrderService {
     }
   }
 
+  public async findCount(): Promise<any> {
+    return await this.orderRepository.query(`
+      select count(id) as qtd
+      from orders
+      where status = 'entregue' AND createdAt >= NOW() - INTERVAL 1 DAY
+    `);
+  }
+
 }

@@ -58,13 +58,20 @@ export class OrderController {
     });
   }
 
+  @Get('/count')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  public async getCount(@Res() res: Response): Promise<any> {
+    const countOrders = await this.orderService.findCount();
+    return res.status(HttpStatus.OK).json(countOrders[0]);
+  }
+
   @Get('/:orderId')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async getById(@Res() res, @Param('orderId') orderId: string): Promise<Orders> {
     const order = await this.orderService.findById(orderId);
 
     return res.status(HttpStatus.OK).json(order);
-  }
+  } 
 
   @Post()
   public async create(
@@ -168,9 +175,9 @@ export class OrderController {
   @Get('/bestSellers/dashboard')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   public async bestSellers(@Res() res): Promise<any> {
-    const products = await this.orderProductService.bestSellers();
+    const reports = await this.orderProductService.bestSellers();
 
-    return res.status(HttpStatus.OK).json(products);
+    return res.status(HttpStatus.OK).json(reports);
   }
 
 }
