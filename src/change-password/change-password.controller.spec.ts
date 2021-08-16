@@ -36,7 +36,8 @@ describe('Register Controller', () => {
       it('should return a updated user successfully', async () => {
         const change = {
           "email": "sabrina@gmail.com",
-          "password": "123456"
+          "password": "123456",
+          "codVerificacao": "sdksjdks123"
         }
         const result = await changePasswordService.changePassword(change);
         expect(result.email).toEqual('sabrina@gmail.com');

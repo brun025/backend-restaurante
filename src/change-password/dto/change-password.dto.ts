@@ -8,4 +8,8 @@ export class ChangePasswordDto {
   @IsString()
   @MaxLength(60)
   readonly password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly codVerificacao: string;
 }

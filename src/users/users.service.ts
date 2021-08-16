@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/users.entity';
@@ -82,9 +82,23 @@ export class UsersService{
   public async updateByPassword(
     email: string,
     password: string,
+    codVerificao: string
   ): Promise<Users> {
     try {
       const user = await this.userRepository.findOne({ email: email });
+      if (!user) {
+        throw new UnauthorizedException('E-mail inexistente');
+      }
+  
+      const passwordIsValid = bcrypt.compareSync(
+        codVerificao,
+        user.password,
+      );
+  
+      if (!passwordIsValid) {
+        throw new UnauthorizedException('Código de verificação incorreto');
+      }
+  
       user.password = bcrypt.hashSync(password, 8);
 
       return await this.userRepository.save(user);

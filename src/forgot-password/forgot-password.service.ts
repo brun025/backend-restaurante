@@ -44,7 +44,7 @@ export class ForgotPasswordService {
           host: 'http://localhost:4200/#/recuperar-senha',
           title: 'Reset de senha!',
           description:
-            'Senha alterada com sucesso! Essa é a sua nova senha temporária: ' +
+            'Senha alterada com sucesso! Seu código de verificação é: ' +
             password + ', caso queira atualizar sua senha clique no botão abaixo.'
         },
       })

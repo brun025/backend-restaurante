@@ -14,12 +14,15 @@ export class ChangePasswordService {
   public async changePassword(
     changePasswordDto: ChangePasswordDto,
   ): Promise<any> {
-    this.sendMailChangePassword(changePasswordDto);
-
-    return await this.usersService.updateByPassword(
+    const alteracaoSenha = await this.usersService.updateByPassword(
       changePasswordDto.email,
       changePasswordDto.password,
+      changePasswordDto.codVerificacao
     );
+    if (alteracaoSenha) {
+      this.sendMailChangePassword(changePasswordDto);
+    }
+    return alteracaoSenha;
   }
 
   private sendMailChangePassword(user): void {
@@ -35,8 +38,7 @@ export class ChangePasswordService {
           host: '#',
           title: 'Senha alterada com sucesso!',
           description:
-            'Senha alterada com sucesso! Essa é a sua nova senha: ' +
-            user.password,
+            'Senha alterada com sucesso!',
           nameUser: user.name,
         },
       })
