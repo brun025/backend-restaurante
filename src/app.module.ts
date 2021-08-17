@@ -31,11 +31,11 @@ import { AdditionModule } from "./addition/addition.module";
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
-          host: "smtp.mailtrap.io",
-          port: 2525,
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
           auth: {
-            user: "b01c9756939a7a",
-            pass: "e0a54d779efaca"
+            user: process.env.EMAIL_AUTH_USER,
+            pass: process.env.EMAIL_AUTH_PASSWORD
           },
         },
         defaults: {
